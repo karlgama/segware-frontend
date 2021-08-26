@@ -1,6 +1,6 @@
-main{
+/* main{
     margin-top: 2rem;
-}
+} */
 .upvote{
     display: flex;
     align-items: center;
@@ -9,7 +9,4 @@ main{
 .container{
     display: flex;
     flex-direction: column;
-}
-.card{
-    margin-top: 1rem;
 }
