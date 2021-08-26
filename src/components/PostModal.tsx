@@ -3,29 +3,36 @@ import React, { useContext, useState } from "react";
 import Context from "../Context";
 import axios from "axios";
 
-export default function PostModal() {
-  const { show, setShow, baseUrl } = useContext(Context);
-  const handleClose = () => setShow(false);
-
-  const intialState = {
-    title: "",
-    message: "",
+export default function PostModal({ action }) {
+  const [formState, setFormState] = useState({ })
+  const { show, setShow, baseUrl, currentPost, setCurrentPost } =
+    useContext(Context);
+  const handleClose = () => {
+    setShow(false);
+    setCurrentPost({ });
   };
-
-  const [formState, setFormState] = useState(intialState);
 
   function onChange(ev) {
     const { name, value } = ev.target;
-    setFormState({ ...formState, [name]: value });
+    setFormState({ ...formState, [name]: value })
+    setCurrentPost({ ...currentPost, [name]: value });
   }
 
   function onSubmit(ev) {
     ev.preventDefault();
-
-    axios.post(`${baseUrl}/posts`, formState).then((res) => {
-      setShow(false)
-
-    });
+    if (action == "new") {
+      console.info("new", `${baseUrl}/posts`, currentPost)
+      axios.post(`${baseUrl}/posts`, currentPost).then((res) => {
+        setShow(false);
+        return null;
+      });
+    } else if (action === "update") {
+      axios
+        .patch(`${baseUrl}/posts/${currentPost.id}`, currentPost)
+        .then((res) => {
+          setShow(false);
+        });
+    }
   }
 
   return (
@@ -43,6 +50,7 @@ export default function PostModal() {
             placeholder="Título bem bonito"
             onChange={onChange}
             name="title"
+            value={currentPost ? currentPost.title : ""}
           />
         </Form.Group>
         <Form.Group className="mb-3" id="formMessage">
@@ -54,6 +62,7 @@ export default function PostModal() {
             name="message"
             rows={5}
             onChange={onChange}
+            value={currentPost ? currentPost.message : ""}
           />
         </Form.Group>
         <Button onSubmit={onSubmit} variant="primary" type="submit">
