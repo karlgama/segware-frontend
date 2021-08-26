@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import Context from "../Context";
 
 export default function AddPost() {
-  const { show, setShow } = useContext(Context);
+  const { setShow } = useContext(Context);
   const handleShow = () => setShow(true);
   return (
     <Button onClick={() => handleShow()} variant="primary">      

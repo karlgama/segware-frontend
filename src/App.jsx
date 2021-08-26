@@ -9,24 +9,24 @@ import AddPost from "./components/AddPost";
 import PostModal from "./components/PostModal";
 import Context from "./Context";
 
+const baseUrl = "http://localhost:8080"
+
 const upvote = (id) => {
-  axios.patch(`http://localhost:8080/posts/${id}/upvotes`).then((response) => {
-    return;
-  });
+  axios.patch(`${baseUrl}/posts/${id}/upvotes`)
 };
 
 function App() {
   const [posts, setPosts] = useState([]);
   const [show, setShow] = useState(false);
-
+  
   useEffect(() => {
-    axios.get("http://localhost:8080/posts").then((response) => {
+    axios.get(`${baseUrl}/posts`).then((response) => {
       setPosts(response.data);
     });
   }, [posts]);
 
   return (
-    <Context.Provider value={{ show, setShow }}>
+    <Context.Provider value={{ show, setShow, baseUrl }}>
       <div className="App">
         <header className="App-header"></header>
         <main className="mt-4">
@@ -41,7 +41,7 @@ function App() {
                   </div>
                 </Card>
               );
-            })}
+            }).reverse()}
             <AddPost />
             <PostModal />
           </div>
